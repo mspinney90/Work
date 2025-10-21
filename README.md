@@ -1,2 +1,2 @@
 # Work
-# Excel functions written in VBA.
+# VBA subprocedures.
