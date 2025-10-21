@@ -1,0 +1,18 @@
+' VBA macro to get and post all file names from selected folder to excel workbook.
+' Cells syntax (rowIndex, columnIndex)
+' Update myPath
+
+Sub FetchNames()
+  Dim my Path As String
+  Dim myFile As String
+  myPath = "C:\"
+  myFile = Dir(myPath & "\")
+
+  r = 2
+  Do While myFile <> ""
+    Cells(r,1).Value = myFile
+    r = r +1
+    myFile = Dir
+  Loop
+
+End Sub
