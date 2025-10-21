@@ -1,0 +1,7 @@
+' VBA macro to trace cell dependents in Excel
+Sub showAllDependents()
+  Dim cell As Range
+  For Each cell In Selection
+    cell.ShowDependents
+  Next cell
+End Sub
