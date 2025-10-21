@@ -1,0 +1,77 @@
+' Description: VBA Macro to create table in Excel workbooks. Error handling if sheet name doesnt exist or if cell A7 is already a table. 
+' Hard code folder path and desired table name as needed.
+' Loop open each Excel workbook in folder
+' If filename[i].sheet("Manual Billing Template") exists and cell A7 is not a table, 
+'      Create table and save changes and close and filename[i] += 1    
+' Else close workbook and filename[i] += 1 
+' Close workbook and increment to next workbook
+' Print results
+
+Sub CheckAndCreateTableInFolder() 
+  Dim folderPath As String 
+  Dim fileName As String 
+  Dim wb As Workbook 
+  Dim ws As Worksheet 
+  Dim cell As Range Dim tbl As ListObject 
+  Dim processedFiles As Long 
+  Dim createdTables As Long 
+  Dim skippedFiles As Long
+  
+  ' Initialize counters 
+  processedFiles = 0 
+  createdTables = 0 
+  skippedFiles = 0 
+
+  ' Set the folder path 
+  folderPath = "C:\Your\Folder\Path\" ' Change this to your folder path 
+
+  ' Get the first file in the folder 
+  fileName = Dir(folderPath & "*.xls*") 
+  
+  ' Loop through all files in the folder 
+  Do While fileName <> "" On Error Resume Next 
+  ' Open the workbook 
+  Set wb = Workbooks.Open(folderPath & fileName) 
+  
+  ' Check if the sheet "Manual Billing Template" exists 
+  Set ws = wb.Sheets("Manual Billing Template") 
+  
+  If Not ws Is Nothing Then 
+  ' Set the cell A7 
+  Set cell = ws.Range("A7") 
+  
+  ' Check if cell A7 is part of a table 
+  Set tbl = cell.ListObject 
+  ' If cell A7 is not part of a table, create a new table If tbl Is Nothing Then 
+  ' Define the range for the new table (adjust as needed) 
+  Dim tblRange As Range 
+  Set tblRange = ws.Range("A7").CurrentRegion 
+  
+  ' Create the table 
+  Set tbl = ws.ListObjects.Add(xlSrcRange, tblRange, , xlYes) 
+  tbl.Name = "Table1" ' Optional: name your table 
+  createdTables = createdTables + 1 
+  End If 
+  Else 
+  skippedFiles = skippedFiles + 1 
+  End If 
+  ' Close the workbook 
+  wb.Close SaveChanges:=True 
+  On Error GoTo 0 
+  
+  ' Increment the processed files counter 
+  processedFiles = processedFiles + 1 
+  
+  ' Get the next file in the folder 
+  fileName = Dir Loop 
+  
+  ' Display a notification when done 
+  MsgBox "Procedure completed!" & vbCrLf & _ 
+  "Total files processed: " & processedFiles & vbCrLf & _ 
+  "Tables created: " & createdTables & vbCrLf & _ 
+  "Files skipped (no 'Manual Billing Template' sheet): " & skippedFiles 
+
+End Sub
+
+
+
