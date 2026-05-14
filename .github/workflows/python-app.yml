@@ -4,6 +4,7 @@
 name: run main.py
 
 on:
+  workflow_dispatch: # workflow_dispatch event enables manual triggering of workflows via the UI, CLI, or API
   schedule:
     - cron: '0 * * * *'
     
